@@ -6,8 +6,8 @@ class RoombookingControllerRoombooking extends JControllerForm
 {
 
 	protected	$option 		= 'com_roombooking';
-	
-    
+
+
     function ajaxbookingfetch()
 	{
 		$app = JFactory::getApplication();
@@ -17,14 +17,14 @@ class RoombookingControllerRoombooking extends JControllerForm
 		$rooms = $db->loadObjectList();
 		$roombookingdetails = array();
 		$booking_date = $input->request->get('booking_date');
-		$span_date = $booking_date ; 
+		$span_date = $booking_date ;
 		$addtimerange = $input->request->get('addtimerange');
 		if($addtimerange == 1) {
 			$date_range = $input->request->get('date_range');
 			$span_date = date('Y-m-d' , strtotime($booking_date.' + '. $date_range.' days' ));
-		} 
-		
-		
+		}
+
+
 		$date_range_array = $this->getDatesFromRange($booking_date , $span_date , 'Y-m-d');  //print_r($date_range_array);
 		?>
 		<h3><?php echo JText::_( 'ROOMBOOKING') ; ?></h3>
@@ -42,7 +42,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 				echo date("H", strtotime("00-00-00 $r:00:00"));
 			?>
 			</th>
-			<?php	
+			<?php
 			}
 		?>
 		</tr>
@@ -78,7 +78,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 				$roomtimearray[$ta] = 1;
 			}
 		}
-			
+
 		$db->setQuery("SELECT * FROM `#__kirk_booking_enquiries` WHERE `booking_date` = '".$date_c."' AND `room_id` = '".$room->id."'");
 		$enquirydetails = $db->loadObjectList();
 		$enquirytimearray = array();
@@ -103,7 +103,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 			}
 		}
 		?>
-		
+
 		<tr class="timebar">
 		<td width="250" class="roomname"><h5><?php echo $room->room_name ; ?></h5></td>
 		<?php
@@ -114,19 +114,19 @@ class RoombookingControllerRoombooking extends JControllerForm
 		}
 		elseif($enquiredtimeslotarray[$i] == 1) {
 			$slotclass = 'enquired';
-		}	
+		}
 		else {
 			$slotclass = 'notbooked';
 		}
 		?>
 		<td class="<?php echo $slotclass ; ?>"></td>
-		<?php	
+		<?php
 		}
 		?>
 		</tr>
-		
-		
-		<?php	
+
+
+		<?php
 		}
 		?>
 		<tr><td width="97" height="10"></td></tr>
@@ -140,98 +140,102 @@ class RoombookingControllerRoombooking extends JControllerForm
 				echo date("H", strtotime("00-00-00 $r:00:00"));
 			?>
 			</th>
-			<?php	
+			<?php
 			}
 		?>
 		</tr>
-		<?php	
+		<?php
 		}
 		?>
 		</table>
 		<?php
 		$app->close();
 	}
-	
-	function getDatesFromRange($start, $end, $format) { 
-		$array = array(); 
-		$interval = new DateInterval('P1D'); 
 
-		$realEnd = new DateTime($end); 
-		$realEnd->add($interval); 
+	function getDatesFromRange($start, $end, $format) {
+		$array = array();
+		$interval = new DateInterval('P1D');
 
-		$period = new DatePeriod(new DateTime($start), $interval, $realEnd); 
+		$realEnd = new DateTime($end);
+		$realEnd->add($interval);
 
-		foreach($period as $date) {                  
-			$array[] = $date->format($format);  
-		} 
-		return $array; 
-	} 
-	
+		$period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+
+		foreach($period as $date) {
+			$array[] = $date->format($format);
+		}
+		return $array;
+	}
+
 	function enquiry() {
-		$app = JFactory::getApplication();
-		$params = JComponentHelper::getParams('com_roombooking');
-		$db = JFactory::getDBO();
-		$input = $app->input;
-		$msg = array();
-		$room_id = $input->get('room_id');
-		$customer_address = $input->getString('customer_address');
-		$customer_name = $input->getString('customer_name');
-		$customer_phone = $input->getString('customer_phone');
-		$customer_email = $input->getString('customer_email');
-		$customer_address = $input->getString('customer_address');
-		$checkin_time_hour = $input->get('checkin_hour');
-		$checkin_time_min = $input->get('checkin_min');
+		$app                = JFactory::getApplication();
+		$params             = JComponentHelper::getParams('com_roombooking');
+		$db                 = JFactory::getDBO();
+		$input              = $app->input;
+		$msg                = array();
+		$room_id            = $input->get('room_id');
+		$customer_address   = $input->getString('customer_address');
+		$customer_name      = $input->getString('customer_name');
+		$customer_phone     = $input->getString('customer_phone');
+		$customer_email     = $input->getString('customer_email');
+		$customer_address   = $input->getString('customer_address');
+		$checkin_time_hour  = $input->get('checkin_hour');
+		$checkin_time_min   = $input->get('checkin_min');
 		$checkout_time_hour = $input->get('checkout_hour');
-		$checkout_time_min = $input->get('checkout_min');
-		$event_required = $input->get('event_required');
-		$booking_reason = $input->getString('booking_reason');
-		$payment_gateway = $input->getString('payment_gateway');
+		$checkout_time_min  = $input->get('checkout_min');
+		$event_required     = $input->get('event_required');
+		$booking_reason     = $input->getString('booking_reason');
+		$payment_gateway    = $input->getString('payment_gateway');
+
         // for now we are disabling payment gateway
         $payment_gateway = 'pay_later';
-		$itemid = $input->get('Itemid');
-		$booking_date = $input->getString('booking_enquiry_date');
-		$add_info = $input->getString('add_info');
-		$business_name = $input->getString('business_name');
-		$date = str_replace('/', '-', $booking_date );
-		$newDate = date("Y-m-d", strtotime($date));
-    	
-		$rooms = array();
-			
+		$itemid          = $input->get('Itemid');
+		$booking_date    = $input->getString('booking_enquiry_date');
+		$add_info        = $input->getString('add_info');
+		$business_name   = $input->getString('business_name');
+		$date            = str_replace('/', '-', $booking_date );
+		$newDate         = date("Y-m-d", strtotime($date));
+		$rooms           = array();
+		$totalPrice      = intval($input->getString('total_price'));
+
 		if ($room_id > 0) {
 			$rooms[] = $room_id;
 		}
 		else {
 			$db->setQuery("SELECT * FROM `#__kirk_rooms` WHERE `status` = 1");
-				
+
 			foreach ($db->loadObjectList() as $room)
 			{
 				$rooms[] = $room->id;
 			}
 		}
-		
+
 		$enquiry = array();
-		
+
 		$no_of_rooms = count($rooms);
-		
-		foreach ($rooms as $room_id) {
-			$checkin_time = $checkin_time_hour.'.'.$checkin_time_min;
+
+
+
+		foreach ($rooms as $room_id)
+		{
+			$checkin_time  = $checkin_time_hour.'.'.$checkin_time_min;
 			$checkout_time = $checkout_time_hour.'.'.$checkout_time_min;
-			$amount = intval($input->getString('total_price')) / $no_of_rooms;
-		
+			$amount        = intval($totalPrice) / $no_of_rooms;
+
 			$query = $db->getQuery(true);
 			$query->select(array('*'));
 			$query->from($db->quoteName('#__kirk_bookings'));
 			$query->where($db->quoteName('booking_date') . ' = ' . $db->quote($newDate));
-			
 			$query->where($db->quoteName('room_id') . ' = ' . $db->quote($room_id));
-			
-		
+
+
 			$db->setQuery($query);
-			$result = $db->loadObjectList();
-			$booking_start = explode('.' , $checkin_time) ;
+			$result            = $db->loadObjectList();
+			$booking_start     = explode('.' , $checkin_time) ;
 			$booking_start_min = $booking_start[0] * 60 + $booking_start[1];
-			$booking_out = explode('.' , $checkout_time) ;
-			$booking_end_min = $booking_out[0] * 60 + $booking_out[1];
+			$booking_out       = explode('.' , $checkout_time) ;
+			$booking_end_min   = $booking_out[0] * 60 + $booking_out[1];
+
 			if(count($result) > 0) {
 				foreach($result as $r) {
 					$existing_booking_start = explode('.' , $r->checkin_time) ;
@@ -252,7 +256,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 					}
 				}
 			}
-		
+
 			$db->setQuery("SELECT * FROM `#__kirk_booking_enquiries` WHERE `booking_date` = '".$newDate."' AND `room_id` = '".$room_id."'");
 
 			$result = $db->loadObjectList();
@@ -260,7 +264,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$booking_start_min = $booking_start[0] * 60 + $booking_start[1];
 			$booking_out = explode('.' , $checkout_time) ;
 			$booking_end_min = $booking_out[0] * 60 + $booking_out[1];
-			
+
 			if(count($result) > 0) {
 				foreach($result as $r) {
 					$existing_booking_start = explode('.' , $r->checkin_time) ;
@@ -281,13 +285,13 @@ class RoombookingControllerRoombooking extends JControllerForm
 					}
 				}
 			}
-		
+
 			$db->setQuery("INSERT INTO `#__kirk_booking_enquiries` VALUES ('' , '".$room_id."' , '".$newDate."' , '".$checkin_time."' , '".$checkout_time."' , '".$customer_name."' , '".$customer_phone."' , '".$customer_email."' , '".$customer_address."', '".$booking_reason."' , '' , '".$event_required."' , '".$payment_gateway."' , '".$amount."', '".$business_name."', '".$add_info."')");
 			$db->Query();
 
 			$new_enquiry_id = $db->insertid();
 			$enquiry[]		= $new_enquiry_id;
-			
+
 			// getting all addons
 			$query = $db->getQuery(true);
 			$query->select(array('*'));
@@ -318,87 +322,103 @@ class RoombookingControllerRoombooking extends JControllerForm
 					$db->execute();
 				}
 			}
-		
-			if($params->get('notifyemail') != '') {
-				$mailer = JFactory::getMailer();
-				$config = JFactory::getConfig();
-				$sender = array( 
-					$config->get( 'mailfrom' ),
-					$config->get( 'fromname' ) 
-				);
 
-				$db->setQuery("SELECT * FROM `#__user_usergroup_map` WHERE `group_id` IN (7 , 8)");
-				$users = $db->loadObjectList();
+		}
 
-				$mailer->setSender($sender);
+		if ($params->get('notifyemail') != '')
+		{
+			$mailer = JFactory::getMailer();
+			$config = JFactory::getConfig();
+			$sender = array(
+				$config->get( 'mailfrom' ),
+				$config->get( 'fromname' )
+			);
 
-				$recipient = $params->get('notifyemail') ;	
-				$mailer->addRecipient($recipient);
+			$db->setQuery("SELECT * FROM `#__user_usergroup_map` WHERE `group_id` IN (7 , 8)");
+			$users = $db->loadObjectList();
 
-				$body   = '<h2>Someone Enquired about a slot</h2>'
-					. '<table border="0" cellpadding="0" cellspacing="0">'
-					. '<tr><td><b>Customer Name</b></td><td>'.$customer_name.'</td></tr>'
-					. '<tr><td><b>Customer Email</b></td><td>'.$customer_email.'</td></tr>'
-					. '<tr><td><b>Customer Phone</b></td><td>'.$customer_phone.'</td></tr>'
-					. '<tr><td><b>Customer Adress</b></td><td>'.$customer_address.'</td></tr>'
-					. '<tr><td><b>Booking Date</b></td><td>'.$booking_date.'</td></tr>'
-					. '<tr><td><b>Checking Time</b></td><td>'.$checkin_time.'</td></tr>'
-					. '<tr><td><b>Checkout Time</b></td><td>'.$checkout_time.'</td></tr>'
-					. '<tr><td><b>Booking Reason</b></td><td>'.$booking_reason.'</td></tr>'
-					. '<tr><td><b>Price</b></td><td>£'.$amount.'</td></tr>'
-					. '<tr><td colspan="2" height="20"></td></tr>'
-					. '<tr><td colspan="2">Thanks</td></tr>'
-					. '<tr><td colspan="2"></td></tr>'
-					. '</table>';
-				$mailer->isHtml(true);
-				$mailer->Encoding = 'base64';
-				$mailer->setBody($body);
-				$send = $mailer->Send();
-				if ( $send !== true ) {
-					echo 'Error sending email: ';
-				} else {
-					echo 'Mail sent';
-				}
+			$mailer->setSender($sender);
 
-				$mailer_second = JFactory::getMailer();	
-				$mailer_second->setSender($sender);
-				$recipient = $customer_email ;	
-				$mailer_second->setSubject('Thank you for your Enquiry your room is now provisionally booked');
-				$mailer_second->addRecipient($recipient);	
-				$body   = '<h2>Thank you for your Enquiry your room is now provisionally booked</h2>'
-					.'<table border="0" width="100%">'
-					. '<tr><td>Thank you for your Enquiry your room is now provisionally booked</td></tr>'
-					. '<tr><td><b>Booking Date</b>&nbsp;'.$booking_date.'</td></tr>'
-					. '<tr><td><b>Checking Time</b>&nbsp;'.$checkin_time.'</td></tr>'
-					. '<tr><td><b>Checkout Time</b>&nbsp;'.$checkout_time.'</td></tr>'
-					. '<tr><td>Please read the attached conditions of hire:-</td></tr>'
+			$recipient = $params->get('notifyemail') ;
+			$mailer->addRecipient($recipient);
+
+			$body = $this->generateEmailBody('admin.enquiry', 'Someone Enquired about a slot', $customer_name, $customer_email, $customer_phone, $customer_address, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
+
+			$mailer->isHtml(true);
+			$mailer->Encoding = 'base64';
+			$mailer->setBody($body);
+			$send = $mailer->Send();
+			if ( $send !== true ) {
+				echo 'Error sending email: ';
+			} else {
+				echo 'Mail sent';
+			}
+
+			$mailer_second = JFactory::getMailer();
+			$mailer_second->setSender($sender);
+			$recipient = $customer_email ;
+			$mailer_second->setSubject('Thank you for your Enquiry your room is now provisionally booked');
+			$mailer_second->addRecipient($recipient);
+
+			$body = $this->generateEmailBody('user.enquiry', 'Thank you for your Enquiry your room is now provisionally booked', $customer_name, $customer_email, $customer_phone, $customer_address, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
+
+			$mailer_second->isHtml(true);
+			$mailer_second->Encoding = 'base64';
+			$mailer_second->setBody($body);
+			//$mailer_second->addAttachment(JPATH_COMPONENT.'/assets/Hiring-Agreement-2019.pdf');
+			$mailer_second->addAttachment(JPATH_COMPONENT.'/assets/Kirksanton-Village-Hall-Standard-Conditions-of-Hire.pdf');
+			$send = $mailer_second->Send();
+			if ( $send !== true ) {
+				echo 'Error sending email: ';
+			} else {
+				echo 'Mail sent';
+			}
+
+		}
+
+		$this->setRedirect(JRoute::_('index.php?option=com_roombooking&view=roombooking&layout=complete_enquiry&enquiry_id=' . $new_enquiry_id, false), JText::_('Thank you for your enquiry we will confirm your booking soon'));
+
+	}
+
+	public function generateEmailBody($context, $heading, $customer_name, $customer_email, $customer_phone, $customer_address, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice)
+	{
+		$body = '<h2>' . $heading . '</h2>';
+		$body.= '<table border="0" width="100%">';
+
+		if ($context == 'user.enquiry')
+		{
+			$body.=	'<tr><td>' . $heading . '</tr>';
+		}
+
+		$body.=	'<tr><td><b>Customer Name</b></td><td>'.$customer_name.'</td></tr>'
+			. '<tr><td><b>Customer Email</b></td><td>'.$customer_email.'</td></tr>'
+			. '<tr><td><b>Customer Phone</b></td><td>'.$customer_phone.'</td></tr>'
+			. '<tr><td><b>Customer Address</b></td><td>'.$customer_address.'</td></tr>'
+			. '<tr><td><b>Booking Date</b></td><td>'.$booking_date.'</td></tr>'
+			. '<tr><td><b>Checking Time</b></td><td>'.$checkin_time.'</td></tr>'
+			. '<tr><td><b>Checkout Time</b></td><td>'.$checkout_time.'</td></tr>'
+			. '<tr><td><b>Booking Reason</b></td><td>'.$booking_reason.'</td></tr>'
+			. '<tr><td><b>Price</b></td><td>£'.$totalPrice.'</td></tr>';
+
+		if ($context == 'user.enquiry')
+		{
+			$body.=	'<tr><td>Please read the attached conditions of hire:-</td></tr>'
 					. '<tr><td><a href="emailto:bookings@kirksantonvillagehall.co.uk"><b>bookings@kirksantonvillagehall.co.uk</b></a></td></tr>'
 					. '<tr><td height="20"></td></tr>'
 					. '<tr><td>Kind Regards</td></tr>'
-					. '<tr><td>Kirksanton Village Hall</td></tr>'
-					. '</table>';
-				$mailer_second->isHtml(true);
-				$mailer_second->Encoding = 'base64';
-				$mailer_second->setBody($body);
-				//$mailer_second->addAttachment(JPATH_COMPONENT.'/assets/Hiring-Agreement-2019.pdf');
-				$mailer_second->addAttachment(JPATH_COMPONENT.'/assets/Kirksanton-Village-Hall-Standard-Conditions-of-Hire.pdf');
-				$send = $mailer_second->Send();
-				if ( $send !== true ) {
-					echo 'Error sending email: ';
-				} else {
-					echo 'Mail sent';
-				}
-
-			}
-		
+					. '<tr><td>Kirksanton Village Hall</td></tr>';
 		}
-		
-		//$app->redirect(JRoute::_('index.php?Itemid='.$itemid) , 'Thank you for your enquiry we will confirm your booking soon');
-		//$app->redirect(JRoute::_('index.php?option=com_roombooking&view=roombooking&layout=payment&enquiry_id='.implode(',', $enquiry).'&payment_gateway='.$payment_gateway.'&Itemid='.$itemid, false), 'Complete your payment now');
-		//$app->redirect(JRoute::_('index.php?option=com_roombooking&view=roombooking&layout=payment&enquiry_id='.implode(',', $enquiry).'&payment_gateway='.$payment_gateway.'&Itemid='.$itemid, false), 'Thank you for your enquiry we will confirm your booking soon');
-		//$app->redirect(JRoute::_('index.php?option=com_roombooking&view=roombooking&layout=complete&enquiry_id='.implode(',', $enquiry).'&Itemid='.$itemid, false), 'Thank you for your enquiry we will confirm your booking soon');
-		$this->setRedirect(JRoute::_('index.php?option=com_roombooking&view=roombooking&layout=complete_enquiry&enquiry_id=' . $new_enquiry_id, false), JText::_('Thank you for your enquiry we will confirm your booking soon'));
-		
+
+		if ($context == 'admin.enquiry')
+		{
+			$body.=	'<tr><td colspan="2" height="20"></td></tr>'
+					. '<tr><td colspan="2">Thanks</td></tr>'
+					. '<tr><td colspan="2"></td></tr>';
+		}
+
+		$body.= '</table>';
+
+		return $body;
 	}
-	
+
 }
