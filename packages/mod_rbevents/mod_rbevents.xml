@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.5" method="upgrade" client="site">
+	<name>RBEvents</name>
+	<creationDate>June 2019</creationDate>
+	<author>Subhas Chandra Show</author>
+	<copyright></copyright>
+	<license></license>	  
+	<authorEmail></authorEmail>
+	<authorUrl></authorUrl>
+	<version></version>
+	<description>Rooombooking Events</description>
+	<files>
+		<filename module="mod_rbevents">mod_rbevents.php</filename>
+		<filename>helper.php</filename>
+		<folder>tmpl</folder>
+	</files>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic"  >
+				<field name="promotion_starts" type="list" default="" label="Promotion Starts" description="Promotion Starts">
+				  <option value="7">In Seven Days</option>
+				  <option value="15">In Fifteen Days</option>
+				  <option value="30">In Thirty Days</option>
+				  <option value="60">In Two Months</option>
+				  <option value="90">In Three Months</option>
+				  <option value="120">In Four Months</option>
+				  <option value="150">In Five Months</option>
+				  <option value="180">In Six Months</option>
+				</field>
+				
+				<field name="event_type" type="list" default="" label="Event Type" description="Event Type">
+				  <option value="">All</option>
+				  <option value="0">On / Off</option>
+				  <option value="1">Regular</option>
+				</field>
+			</fieldset>				
+		</fields>
+	</config>
+</extension>
