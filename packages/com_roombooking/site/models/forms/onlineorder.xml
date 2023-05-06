@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+<form>
+	<fields>
+    	<field name="virtuemart_order_id" type="hidden"
+			default="0"
+			required="true"
+			readonly="true"
+		/>
+
+		<field name="order_number" type="text"
+			class="inputbox" required="true"
+			description="ORDERNUMBER"
+			label="ORDERNUMBER"
+			size="20"
+		/>
+		
+		<field name="payment_name" type="text"
+			class="inputbox" required="true"
+			description="PAYMENTMETHOD"
+			label="PAYMENTMETHOD"
+			size="20"
+		/>
+		
+		<field name="shipment_name" type="text"
+			class="inputbox" required="true"
+			description="SHIPMENTMETHOD"
+			label="SHIPMENTMETHOD"
+			size="20"
+		/>
+		
+		<field name="created_on" type="text"
+			class="inputbox" required="true"
+			description="ORDERDATE"
+			label="ORDERDATE"
+			size="20"
+		/>
+		
+		<field name="modified_on" type="text"
+			class="inputbox" required="true"
+			description="LASTMODIFIED"
+			label="LASTMODIFIED"
+			size="20"
+		/>
+		
+		<field name="first_name" type="text"
+			class="inputbox" required="true"
+			description="LASTMODIFIED"
+			label="LASTMODIFIED"
+		/>
+		
+		<field name="middle_name" type="text"
+			class="inputbox" required="true"
+			description="LASTMODIFIED"
+			label="LASTMODIFIED"
+		/>
+		
+		<field name="last_name" type="text"
+			class="inputbox" required="true"
+			description="LASTMODIFIED"
+			label="LASTMODIFIED"
+		/>
+		
+		<field name="email" type="text"
+			class="inputbox" required="true"
+			description="EMAIL"
+			label="EMAIL"
+		/>
+		
+		<field name="order_status" type="list" default="" label="STATUS" description="STATUS">
+		  <option value="P">COM_VIRTUEMART_ORDER_STATUS_PENDING</option>
+		  <option value="U">COM_VIRTUEMART_ORDER_STATUS_CONFIRMED_BY_SHOPPER</option>
+		  <option value="C">COM_VIRTUEMART_ORDER_STATUS_CONFIRMED</option>
+		  <option value="X">COM_VIRTUEMART_ORDER_STATUS_CANCELLED</option>
+		  <option value="R">COM_VIRTUEMART_ORDER_STATUS_REFUNDED</option>
+		  <option value="S">COM_VIRTUEMART_ORDER_STATUS_SHIPPED</option>
+		  <option value="F">COM_VIRTUEMART_ORDER_STATUS_COMPLETED</option>
+		  <option value="D">COM_VIRTUEMART_ORDER_STATUS_DENIED</option>
+		</field>
+	</fields>
+     
+   
+</form>

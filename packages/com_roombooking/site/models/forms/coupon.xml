@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+<form>
+	<fieldset addfieldpath="/administrator/components/com_vmapi/models/fields"> 
+	
+    <fields>
+    	<field name="id" type="hidden"
+			default="0"
+			required="true"
+			readonly="true"
+		/>
+
+		<field name="discount_percentage" type="number" min="0.1" default="10"
+			class="input-small" required="true"
+			label="COUPON_DISCOUNT"
+		/>
+		
+		<field name="categories_applied_to" type="couponcategory" label="CATEGORY_CAN_BE_USED" description="CATEGORY_CAN_BE_USED" multiple="true" required="true" />
+		
+		<field name="categories_buy_to" type="couponcategorybuy" label="CATEGORY_CAN_BE_BUY" description="CATEGORY_CAN_BE_BUY" multiple="true" required="true" />
+		
+		<field name="min_amt" type="number" min="10"
+			class="input-small" required="true"
+			label="MIN_AMT"
+		/>
+		
+		<field name="start_date" type="calendar" default="" label="START_DATE" description="" class="input-small" required="true" filter="user_utc"
+		showtime="false" todaybutton="false" filltable="false" translateformat="true" />
+		
+		<field name="end_date" type="calendar" default="" label="END_DATE" description="" class="input-small" required="true" filter="user_utc"
+		showtime="false" todaybutton="false" filltable="false" translateformat="true" />
+		
+		<field name="stop_date" type="calendar" default="" label="STOP_DATE" description="" class="input-small" required="true" filter="user_utc"
+		showtime="false" todaybutton="false" filltable="false" translateformat="true" />
+
+		<field name="status" type="list" default="" label="PUBLISH" description="PUBLISH">
+		  <option value="0">JUNPUBLISHED</option>
+		  <option value="1">JPUBLISHED</option>
+		</field>
+        
+     </fields>  
+     </fieldset>
+   
+</form>

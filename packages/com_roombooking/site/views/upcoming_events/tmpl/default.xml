@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Upcoming Events">
+		<help
+			key = "Upcoming Events"
+		/>
+		<message>
+			<![CDATA[Upcoming Events]]>
+		</message>
+	</layout>
+
+</metadata>

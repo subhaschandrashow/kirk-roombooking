@@ -1,0 +1,152 @@
+<config>
+   <fields>
+    <fieldset name="form" label="Google Recaptcha key">
+ 	<field
+		name="sitekey"
+		type="text"
+		label="Site Key"
+		description="Site Key" />
+	<field
+		name="secretkey"
+		type="text"
+		label="Secret Key"
+		description="Secret Key" />
+	<field
+		name="notifyemail"
+		type="text"
+		label="Notification Email"
+		description="Notification Email" />	
+	</fieldset>
+	
+	<fieldset name="display" label="Ads display setting for upcoming events">
+ 		<field name="display_upto" type="list" default="" label="Display Upto" description="Display Upto">
+		  <option value="7">Seven Days</option>
+		  <option value="15">Fifteen Days</option>
+		  <option value="30">Thirty Days</option>
+		  <option value="60">Two Months</option>
+		  <option value="90">Three Months</option>
+		  <option value="120">Four Months</option>
+		  <option value="150">Five Months</option>
+		  <option value="180">Six Months</option>
+		</field>	
+	</fieldset>
+	
+	<fieldset name="price_settings" label="Hourly Price setting for rooms for different kind of people">
+		<field
+			name="main_local_price"
+			type="text"
+			label="Main hall price for local people"
+			description="Main hall price for local people" />
+			
+		<field
+			name="main_non_local_price"
+			type="text"
+			label="Main hall price for non local people"
+			description="Main hall price for non local people" />
+		
+		<field
+			name="main_business_price"
+			type="text"
+			label="Main hall price for business"
+			description="Main hall price for business" />
+			
+		<field
+			name="main_spin_cycle_price"
+			type="text"
+			label="Main hall price for spin cycle"
+			description="Main hall price for spin cycle" />
+
+		<field
+			name="meeting_local_price"
+			type="text"
+			label="Meeting hall price for local people"
+			description="Meeting hall price for local people" />
+
+		<field
+			name="meeting_non_local_price"
+			type="text"
+			label="Meeting hall price for non local people"
+			description="Meeting hall price for non local people" />
+
+		<field
+			name="meeting_business_price"
+			type="text"
+			label="Meeting hall price for business"
+			description="Meeting hall price for business" />
+
+		<field
+			name="meeting_spin_cycle_price"
+			type="text"
+			label="Meeting hall price for spin cycle"
+			description="Meeting hall price for spin cycle" />
+
+		<field
+			name="full_building_local_price"
+			type="text"
+			label="Full building hall price for local people"
+			description="Full building hall price for local people" />
+
+		<field
+			name="full_building_non_local_price"
+			type="text"
+			label="Full building hall price for non local people"
+			description="Full building hall price for non local people" />
+
+		<field
+			name="full_building_business_price"
+			type="text"
+			label="Full building hall price for business"
+			description="Full building hall price for business" />
+
+		<field
+			name="full_building_spin_cycle_price"
+			type="text"
+			label="Full building hall price for spin cycle"
+			description="Full building hall price for spin cycle" />
+	</fieldset>
+	
+	<fieldset name="paypal" label="KIRK_PAYPAL_SETTING">
+    	<field name="paypal_mode" type="list" default="1" label="KIRK_PAYPAL_SANDBOX_LIVE" description="KIRK_PAYPAL_SANDBOX_LIVE">
+		  <option value="0">KIRK_PAYPAL_SANDBOX</option>
+		  <option value="1">KIRK_PAYPAL_LIVE</option>
+		</field>
+		<field
+			name="paypal_email"
+			type="text"
+			label="KIRK_PAYPAL_BUSINESS_EMAIL"
+			description="KIRK_PAYPAL_BUSINESS_EMAIL"
+		/>
+		<field
+			name="paypal_restapi_client_id"
+			type="text"
+			label="KIRK_PAYPAL_REST_API_CLIENT_ID"
+			description="KIRK_PAYPAL_REST_API_CLIENT_ID"
+		/>
+		<field
+			name="paypal_restapi_secret"
+			type="text"
+			label="KIRK_PAYPAL_REST_API_SECRET"
+			description="KIRK_PAYPAL_REST_API_SECRET"
+		/>
+	</fieldset>
+	
+	<fieldset name="stripe" label="KIRK_STRIPE_SETTING">
+    	<field name="stripe_mode" type="list" default="1" label="KIRK_STRIPE_SANDBOX_LIVE" description="KIRK_STRIPE_SANDBOX_LIVE">
+		  <option value="0">KIRK_STRIPE_SANDBOX</option>
+		  <option value="1">KIRK_STRIPE_LIVE</option>
+		</field>
+		<field
+			name="stripe_secret_key"
+			type="text"
+			label="KIRK_STRIPE_SECRET_KEY"
+			description="KIRK_STRIPE_SECRET_KEY"
+		/>
+		<field
+			name="stripe_publish_key"
+			type="text"
+			label="KIRK_STRIPE_PUBLISHABLE_KEY"
+			description="KIRK_STRIPE_PUBLISHABLE_KEY"
+		/>
+	</fieldset>
+	</fields>
+</config>

@@ -1,0 +1,91 @@
+@charset "utf-8";
+/* CSS Document */
+.roombooking .nav > li > a, .roombooking .nav > li > span, .roombooking .nav > li > .separator { color:#000000; }
+.field-calendar .input-append input[type="text"] { float:left; }
+.input-append { float: left; }
+.timetable .notbooked { background: #44E32C; width:1%; border-right: 1px solid #cccccc !important;  }
+.timetable .booked { background: #E00A0D; width:1%; border-right: 1px solid #cccccc !important;  }
+.timetable .enquired { background: #EEF409; width:1%; border-right: 1px solid #cccccc !important;  }
+.timetable .rightruler { border-right:1px solid #BBA9A9; text-align: center; font-size: 0.9rem; vertical-align: middle; }
+.redblock { background: #E00A0D; width: 20px; height: 20px; float:left; }
+.greenblock { background: #44E32C; width: 20px; height: 20px;  float:left; }
+.yellowblock { background: #EEF409; width: 20px; height: 20px;  float:left; }
+.timebar { height:100px; }
+.roomname { display: table-cell; align-items: center; vertical-align: middle; text-align: center; }
+
+.heading-1{
+  position:relative;
+  text-align: center;
+}
+.heading-1:before {
+  content: "";
+  display: block;
+  border-top: solid 2px #bebebe;
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  top: 50%;
+  z-index: 0;
+}
+.heading-1 span {
+  background: #fff;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.clearheight { height:10px; }
+.roombookingform .control-label { float: left; width: 230px; text-align: left; padding-right: 16px; }
+.roombookingform textarea { height:20rem; }
+.roombookingform select { float: left; }
+.roombookingform .control-group { float:left !important; width:100% !important; }
+.item-radio-label-inline { margin-right: 16px; display:inline-block; }
+.item-radio-label-inline label input[type="radio"] { margin-right: 7px; }
+.roombookingform .chzn-container { float:left !important; }
+.required { color:#E9080B !important; }
+.qx-inner { overflow:visible !important; }
+
+/* The grid: Four equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 20%;
+  padding: 10px;
+}
+
+/* Style the images inside the grid */
+.column img {
+  opacity: 0.8; 
+  cursor: pointer; 
+}
+
+.column img:hover {
+  opacity: 1;
+}
+
+/* Expanding image text */
+#imgtext {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  color: white;
+  font-size: 20px;
+}
+
+/* Closable button inside the image */
+.closebtn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: white;
+  font-size: 35px;
+  cursor: pointer;
+}
+.px-2 {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+.t3-roof .event_details > .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 { padding:15px !important; }
+.upcoming_events table td img { width:auto !important; height: 15rem !important; }
+
+/*Stripe payment css*/
+.demoSelectBox { float:left; }

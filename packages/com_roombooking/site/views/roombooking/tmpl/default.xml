@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_ROOMBOOKING_VIEW_DEFAULT_TITLE">
+		<help
+			key = "COM_ROOMBOOKING_VIEW_DEFAULT_TITLE"
+		/>
+		<message>
+			<![CDATA[COM_ROOMBOOKING_VIEW_DEFAULT_TEXT]]>
+		</message>
+	</layout>
+
+</metadata>

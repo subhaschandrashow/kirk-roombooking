@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5" method="upgrade">
+    <name>ROOMBOOKING</name>
+    <version>1.0</version>
+    <description>Created By Subhas Chandra Show</description>
+    <license>Commercial</license>
+    <author>joomrocks.com</author>
+    <authoremail>support@joomrocks.com</authoremail>
+    <authorurl>http://www.joomrocks.com</authorurl>
+    <copyright>Copyright (C) joomrocks.com</copyright>
+    <creationDate>2019</creationDate>
+    <files folder="site">
+       	<folder>assets</folder>
+        <folder>controllers</folder>
+        <folder>helpers</folder>
+        <folder>models</folder>
+        <folder>views</folder>
+        <filename>roombooking.php</filename>
+        <filename>controller.php</filename>
+        <filename>roombooking.php</filename>	
+    </files>
+	
+	
+     <languages folder="site/language">
+			<language tag="en-GB">en-GB/en-GB.com_roombooking.ini</language>
+     </languages>
+    
+     <install>
+          <sql>
+             <file charset="utf8" driver="mysql">install.sql</file>
+          </sql>
+       </install>	   
+       <uninstall>
+          <sql>
+             <file charset="utf8" driver="mysql">uninstall.sql</file>
+          </sql>
+       </uninstall>
+	   <update> 
+        <schemas> 
+                <schemapath type="mysql">sql/updates/mysql</schemapath> 
+        </schemas> 
+		</update>
+    <administration>
+        <menu link="option=com_vmapi">ROOMBOOKING</menu>
+        <files folder="admin">
+            <folder>assets</folder>
+            <folder>controllers</folder>
+            <folder>models</folder> 
+            <folder>elements</folder>                      
+            <folder>language</folder>                      
+            <folder>tables</folder>
+            <folder>helpers</folder>
+            <folder>views</folder>
+			<folder>sql</folder>
+            <filename>roombooking.php</filename>
+            <filename>config.xml</filename>
+            <filename>access.xml</filename>
+            <filename>controller.php</filename>
+            <filename>uninstall.sql</filename>
+            <filename>install.sql</filename>
+        </files>
+         <languages folder="admin/language">
+			<language tag="en-GB">en-GB/en-GB.com_roombooking.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_roombooking.sys.ini</language>
+        </languages>
+    </administration>
+</extension>

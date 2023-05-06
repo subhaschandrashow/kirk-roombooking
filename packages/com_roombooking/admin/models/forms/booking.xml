@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form>
+	<fieldset addfieldpath="/administrator/components/com_roombooking/models/fields">
+
+    <fields>
+    	<field name="id" type="hidden"
+			default="0"
+			required="true"
+			readonly="true"
+		/>
+
+		<field name="room_id" type="rooms"
+			required="true"
+			description=""
+			label="SELECTROOM"
+		/>
+
+		<field name="booking_date" type="calendar" label="BOOKINGDATE"
+			class="input-small" required="true" filter="user_utc"
+			todaybutton="true" filltable="false"
+		/>
+
+		<field name="customer_name" type="text"
+			required="true"
+			description="CUSTOMER_NAME"
+			label="CUSTOMER_NAME"
+		/>
+
+		<field name="customer_phone" type="tel"
+			description="CUSTOMER_PHONE"
+			label="CUSTOMER_PHONE"
+		/>
+
+		<field name="customer_email" type="email"
+			description="CUSTOMER_EMAIL"
+			label="CUSTOMER_EMAIL"
+		/>
+
+		<field name="customer_address" type="textarea"
+			description="CUSTOMER_ADDRESS"
+			label="CUSTOMER_ADDRESS"
+		/>
+
+		<field name="booking_reason" type="textarea"
+			description="BOOKING_REASON"
+			label="BOOKING_REASON"
+		/>
+
+		<field name="business_name" type="text"
+			   description="BUSINESS_NAME"
+			   label="BUSINESS_NAME"
+		/>
+
+		<field name="add_info" type="textarea"
+			   description="ADDITIONAL_INFO"
+			   label="ADDITIONAL_INFO"
+		/>
+
+		<field name="admin_note" type="textarea"
+			description="ADMIN_NOTE"
+			label="ADMIN_NOTE"
+		/>
+
+       <field name="booking_master_id" type="hidden"
+		/>
+
+       <!--<field name="add_holidays" type="calendar" default="" label="SELECT_HOLIDAYS" description=""
+		class="input-small" filter="user_utc"
+		showtime="false" todaybutton="false" filltable="false" translateformat="true" />-->
+
+     </fields>
+     </fieldset>
+
+</form>
