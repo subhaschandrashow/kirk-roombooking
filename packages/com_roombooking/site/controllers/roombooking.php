@@ -179,6 +179,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 		$customer_phone     = $input->getString('customer_phone');
 		$customer_email     = $input->getString('customer_email');
 		$customer_address   = $input->getString('customer_address');
+		$customer_type      = $input->get('customer_type');
 		$checkin_time_hour  = $input->get('checkin_hour');
 		$checkin_time_min   = $input->get('checkin_min');
 		$checkout_time_hour = $input->get('checkout_hour');
@@ -197,16 +198,27 @@ class RoombookingControllerRoombooking extends JControllerForm
 		$newDate         = date("Y-m-d", strtotime($date));
 		$rooms           = array();
 		$totalPrice      = intval($input->getString('total_price'));
+		$roomTypes       = array();
 
 		if ($room_id > 0) {
 			$rooms[] = $room_id;
+
+			$query = $db->getQuery(true);
+			$query->select(array('*'));
+			$query->from($db->quoteName('#__kirk_rooms'));
+			$query->where($db->quoteName('id') . ' = ' . $db->quote($room_id));
+
+			$roomDetail  = $db->loadObject();
+			$roomTypes[] = $roomDetail->room_name;
+
 		}
 		else {
 			$db->setQuery("SELECT * FROM `#__kirk_rooms` WHERE `status` = 1");
 
 			foreach ($db->loadObjectList() as $room)
 			{
-				$rooms[] = $room->id;
+				$rooms[]     = $room->id;
+				$roomTypes[] = $room->room_name;
 			}
 		}
 
@@ -342,7 +354,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$recipient = $params->get('notifyemail') ;
 			$mailer->addRecipient($recipient);
 
-			$body = $this->generateEmailBody('admin.enquiry', 'Someone Enquired about a slot', $customer_name, $customer_email, $customer_phone, $customer_address, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
+			$body = $this->generateEmailBody('admin.enquiry', 'Someone Enquired about a slot', $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $roomTypes, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
 
 			$mailer->isHtml(true);
 			$mailer->Encoding = 'base64';
@@ -360,7 +372,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$mailer_second->setSubject('Thank you for your Enquiry your room is now provisionally booked');
 			$mailer_second->addRecipient($recipient);
 
-			$body = $this->generateEmailBody('user.enquiry', 'Thank you for your Enquiry your room is now provisionally booked', $customer_name, $customer_email, $customer_phone, $customer_address, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
+			$body = $this->generateEmailBody('user.enquiry', 'Thank you for your Enquiry your room is now provisionally booked', $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $roomTypes, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
 
 			$mailer_second->isHtml(true);
 			$mailer_second->Encoding = 'base64';
@@ -380,7 +392,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 
 	}
 
-	public function generateEmailBody($context, $heading, $customer_name, $customer_email, $customer_phone, $customer_address, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice)
+	public function generateEmailBody($context, $heading, $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $room_types, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice)
 	{
 		$body = '<h2>' . $heading . '</h2>';
 		$body.= '<table border="0" width="100%">';
@@ -394,6 +406,8 @@ class RoombookingControllerRoombooking extends JControllerForm
 			. '<tr><td><b>Customer Email</b></td><td>'.$customer_email.'</td></tr>'
 			. '<tr><td><b>Customer Phone</b></td><td>'.$customer_phone.'</td></tr>'
 			. '<tr><td><b>Customer Address</b></td><td>'.$customer_address.'</td></tr>'
+			. '<tr><td><b>Customer Type</b></td><td>'.$this->getCustomerTypeLabel($customer_type).'</td></tr>'
+			. '<tr><td><b>Room Type</b></td><td>'.implode(', ', $room_types).'</td></tr>'
 			. '<tr><td><b>Booking Date</b></td><td>'.$booking_date.'</td></tr>'
 			. '<tr><td><b>Checking Time</b></td><td>'.$checkin_time.'</td></tr>'
 			. '<tr><td><b>Checkout Time</b></td><td>'.$checkout_time.'</td></tr>'
@@ -419,6 +433,13 @@ class RoombookingControllerRoombooking extends JControllerForm
 		$body.= '</table>';
 
 		return $body;
+	}
+
+	public function getCustomerTypeLabel($customerTypeId)
+	{
+		$customerTypeLabel = $customerTypeId == 1 ? "Local Resident" : ($customerTypeId == 2 ? "Non Local Resident" : ($customerTypeId == 3 ? "Business/Commercial" : "Invalid"));
+
+		return $customerTypeLabel;
 	}
 
 }
