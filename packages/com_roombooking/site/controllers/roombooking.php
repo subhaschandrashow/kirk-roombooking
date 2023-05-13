@@ -167,7 +167,8 @@ class RoombookingControllerRoombooking extends JControllerForm
 		return $array;
 	}
 
-	function enquiry() {
+	function enquiry()
+	{
 		$app                = JFactory::getApplication();
 		$params             = JComponentHelper::getParams('com_roombooking');
 		$db                 = JFactory::getDBO();
@@ -226,7 +227,21 @@ class RoombookingControllerRoombooking extends JControllerForm
 
 		$no_of_rooms = count($rooms);
 
+		// getting all addons
+		$AllPublishedAddOns = $this->getAllPublishedAddOns();
 
+		$addOnsAddedInEnquiry = array();
+		$totalAddonPrice = 0;
+
+		foreach ($AllPublishedAddOns as $an)
+		{
+			$adonvalue = $input->get('addon_'.$an->id);
+
+			if ($adonvalue == 1)
+			{
+				$addOnsAddedInEnquiry[] = array('id' => $an->id, 'addon_title' => $an->addon_title, 'price' => $an->price);
+			}
+		}
 
 		foreach ($rooms as $room_id)
 		{
@@ -278,13 +293,11 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$booking_end_min = $booking_out[0] * 60 + $booking_out[1];
 
 			if(count($result) > 0) {
-				foreach($result as $r) {
+				foreach ($result as $r) {
 					$existing_booking_start = explode('.' , $r->checkin_time) ;
 					$existing_booking_start_min = $existing_booking_start[0] * 60 + $existing_booking_start[1];
 					$existing_booking_out = explode('.' , $r->checkout_time) ;
 					$existing_booking_end_min = $existing_booking_out[0] * 60 + $existing_booking_out[1];
-
-
 
 					if($booking_start_min >= $existing_booking_start_min && $booking_start_min < $existing_booking_end_min) {
 						$app->enqueueMessage(JText::_('It looks like you are trying to book an unavailable slot'), 'error');
@@ -304,37 +317,27 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$new_enquiry_id = $db->insertid();
 			$enquiry[]		= $new_enquiry_id;
 
-			// getting all addons
-			$query = $db->getQuery(true);
-			$query->select(array('*'));
-			$query->from($db->quoteName('#__kirk_addons'));
-			$query->where($db->quoteName('status') . ' = 1');
 
-			$db->setQuery($query);
-			$addons = $db->loadObjectlist();
 
-			foreach ($addons as $an)
+			$addOnAdded      = array();
+
+			foreach ($addOnsAddedInEnquiry as $an)
 			{
-				$adonvalue = $input->get('addon_'.$an->id);
+				$query = $db->getQuery(true);
+				$columns = array('enquiry_id', 'addon_id', 'price');
+				$values = array($new_enquiry_id, $an['id'], $db->quote($an['price']));
 
-				if ($adonvalue == 1)
-				{
-					$query = $db->getQuery(true);
-					$columns = array('enquiry_id', 'addon_id', 'price');
-					$values = array($new_enquiry_id, $an->id, $db->quote($an->price));
+				// Prepare the insert query.
+				$query
+					->insert($db->quoteName('#__kirk_enquiry_addons'))
+					->columns($db->quoteName($columns))
+					->values(implode(',', $values));
 
-					// Prepare the insert query.
-					$query
-						->insert($db->quoteName('#__kirk_enquiry_addons'))
-						->columns($db->quoteName($columns))
-						->values(implode(',', $values));
+				// Set the query using our newly populated query object and execute it.
+				$db->setQuery($query);
+				$db->execute();
 
-					// Set the query using our newly populated query object and execute it.
-					$db->setQuery($query);
-					$db->execute();
-				}
 			}
-
 		}
 
 		if ($params->get('notifyemail') != '')
@@ -354,7 +357,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$recipient = $params->get('notifyemail') ;
 			$mailer->addRecipient($recipient);
 
-			$body = $this->generateEmailBody('admin.enquiry', 'Someone Enquired about a slot', $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $roomTypes, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
+			$body = $this->generateEmailBody('admin.enquiry', 'Someone Enquired about a slot', $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $roomTypes, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice, $addOnsAddedInEnquiry);
 
 			$mailer->isHtml(true);
 			$mailer->Encoding = 'base64';
@@ -372,7 +375,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 			$mailer_second->setSubject('Thank you for your Enquiry your room is now provisionally booked');
 			$mailer_second->addRecipient($recipient);
 
-			$body = $this->generateEmailBody('user.enquiry', 'Thank you for your Enquiry your room is now provisionally booked', $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $roomTypes, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice);
+			$body = $this->generateEmailBody('user.enquiry', 'Thank you for your Enquiry your room is now provisionally booked', $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $roomTypes, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice, $addOnsAddedInEnquiry);
 
 			$mailer_second->isHtml(true);
 			$mailer_second->Encoding = 'base64';
@@ -392,7 +395,7 @@ class RoombookingControllerRoombooking extends JControllerForm
 
 	}
 
-	public function generateEmailBody($context, $heading, $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $room_types, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice)
+	public function generateEmailBody($context, $heading, $customer_name, $customer_email, $customer_phone, $customer_address, $customer_type, $room_types, $booking_date, $checkin_time, $checkout_time, $booking_reason, $totalPrice, $addOnsAddedInEnquiry)
 	{
 		$body = '<h2>' . $heading . '</h2>';
 		$body.= '<table border="0" width="100%">';
@@ -412,7 +415,12 @@ class RoombookingControllerRoombooking extends JControllerForm
 			. '<tr><td><b>Checking Time</b></td><td>'.$checkin_time.'</td></tr>'
 			. '<tr><td><b>Checkout Time</b></td><td>'.$checkout_time.'</td></tr>'
 			. '<tr><td><b>Booking Reason</b></td><td>'.$booking_reason.'</td></tr>'
-			. '<tr><td><b>Price</b></td><td>£'.$totalPrice.'</td></tr>';
+			. '<tr><td><b>Total Price</b></td><td>£'.$totalPrice.'</td></tr>';
+
+		foreach ($addOnsAddedInEnquiry as $addOn)
+		{
+			$body.=	'<tr><td><b>' . $addOn['addon_title'] . '</b></td><td>£'.$addOn['price'].'</td></tr>';
+		}
 
 		if ($context == 'user.enquiry')
 		{
@@ -440,6 +448,20 @@ class RoombookingControllerRoombooking extends JControllerForm
 		$customerTypeLabel = $customerTypeId == 1 ? "Local Resident" : ($customerTypeId == 2 ? "Non Local Resident" : ($customerTypeId == 3 ? "Business/Commercial" : "Invalid"));
 
 		return $customerTypeLabel;
+	}
+
+	public function getAllPublishedAddOns()
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select(array('*'));
+		$query->from($db->quoteName('#__kirk_addons'));
+		$query->where($db->quoteName('status') . ' = 1');
+
+		$db->setQuery($query);
+		$addons = $db->loadObjectlist();
+
+		return $addons;
 	}
 
 }
